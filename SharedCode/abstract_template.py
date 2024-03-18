@@ -46,7 +46,7 @@ from SharedCode.helpers import is_invalid_param_string, generate_unique_identifi
 
 # Fetch the connection string from an environment variable
 storage_connection_string = os.getenv("AzureWebJobsStorage")
-queue_name = "domain-check-queue"
+queue_name = "domain-checks-queue"
 
 HTTP_REQUEST_TIMEOUT = 10  # Default timeout for HTTP requests (in seconds)
 
