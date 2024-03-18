@@ -1,0 +1,13 @@
+{
+    "scriptFile": "__init__.py",
+    "bindings": [
+        {
+            "name": "azqueue",
+            "type": "queueTrigger",
+            "direction": "in",
+            "queueName": "domain-checks-queue-trigger",
+            "connection": "AzureWebJobsStorage"
+        }
+    ]
+}
+
