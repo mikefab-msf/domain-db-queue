@@ -1,8 +1,0 @@
-import azure.functions as func
-import logging
-
-# The decorator specifies that this function listens to queue messages
-@app.queue_trigger(arg_name="azqueue", queue_name="domain-checks-queue-trigger", connection="AzureWebJobsStorage")
-def main(azqueue: func.QueueMessage) -> None:
-    # Function logic
-    logging.info('Python Queue trigger processed a message: %s', azqueue.get_body().decode('utf-8'))
