@@ -6,4 +6,3 @@ import logging
 def main(azqueue: func.QueueMessage) -> None:
     # Function logic
     logging.info('Python Queue trigger processed a message: %s', azqueue.get_body().decode('utf-8'))
-
