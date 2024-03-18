@@ -39,8 +39,17 @@ def main(msg: func.QueueMessage) -> None:
 
         check_result, check_result_details = check_instance.check_domain(domain_name, domain_owner=domain_owner, record_id=record_id)
 
+        domain_info = {
+            "id": record_id,
+            "name": domain_name
+        }
+
         try:
-            check_instance.update_activity_info_after_check(domain_name, domain_owner, record_id, check_result, check_result_details)
+            check_instance.update_results_to_db(
+                domain_info,
+                check_result,
+                check_result_details
+            )
             logging.info(f"ActivityInfo updated successfully for domain '{domain_name}' after check.")
         except Exception as update_error:
             logging.error(f"Failed to update ActivityInfo for domain '{domain_name}' due to exception: {update_error}")

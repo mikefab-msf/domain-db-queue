@@ -159,6 +159,7 @@ class AbstractTemplateCheck(ABC):
             record_id (int): Database record ID for the update.
             """
         # Prepare the fields for update or insertion
+
         fields = {
             self.schemas[self.resource_ids['Results']]['Data']:
             check_result_details['data'] if 'data' in check_result_details else "",
@@ -169,7 +170,7 @@ class AbstractTemplateCheck(ABC):
             self.schemas[self.resource_ids['Results']]['Checks']:
             self.checks_lookup[self.check_name],
         }
-
+    
         if 'ip_id' in check_result_details:
             fields[self.schemas[self.resource_ids['Results']]['IP addresses']] = \
                 self.resource_ids['IP addresses'] + ':' + check_result_details['ip_id']
@@ -251,9 +252,6 @@ class AbstractTemplateCheck(ABC):
         for domain_row in domains_rows:
             domain_name, domain_owner, record_id = domain_row
 
-            check_info = f"Enqueuing check \"{self.check_name}\" for domain \"{domain_name}\""
-            logging.info("%s...", check_info)
-
             # Construct the message to be sent to the queue
             message = {
                 'check_name': self.check_name,
@@ -264,38 +262,6 @@ class AbstractTemplateCheck(ABC):
             encoded_message = base64.b64encode(json.dumps(message).encode('utf-8')).decode('utf-8')
             # Send the message to the queue
             queue_client.send_message(encoded_message)
-
-            logging.info("%s: enqueued.", check_info)
-
-
-    def update_activity_info_after_check(self, domain_name, domain_owner, record_id, check_result, check_result_details):
-        check_info = f"Updating '{self.check_name}' check for domain '{domain_name}' with record ID '{record_id}'"
-        logging.info(check_info)
-
-        fields = {
-            self.check_field_id: check_result.value
-        }
-
-        try:
-            response = self.activityinfo_data.update_record(
-                record_id=record_id,
-                form_id=self.activityinfo_data.resource_ids.get('Domains'),
-                fields=fields,
-                parent_id=None  # or the appropriate parent ID if applicable
-            )
-            # Ensuring response is checked correctly for status
-            if response and response.status_code == 200:
-                logging.info(f"Successfully updated activity info for Domain '{domain_name}'")
-            else:
-                # Better error detail if response is available
-                if response:
-                    logging.error(f"Failed to update activity info for Domain '{domain_name}'. Status Code: {response.status_code}")
-                else:
-                    logging.error(f"Failed to update activity info for Domain '{domain_name}' due to no response.")
-        except requests.RequestException as e:
-            logging.error(f"Request failed for Domain '{domain_name}'. Exception: {str(e)}")
-        except Exception as e:
-            logging.exception(f"Unexpected error occurred while updating Domain '{domain_name}': {str(e)}")
 
 
     @abstractmethod
