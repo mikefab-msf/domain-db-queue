@@ -22,6 +22,7 @@ import os
 import time
 from collections import defaultdict
 import requests
+from typing import Optional
 from azure.functions import HttpRequest, HttpResponse
 from SharedCode.activityinfo import ActivityInfoData
 from SharedCode.abstract_template import AbstractTemplateCheck, CheckResult, lookup_ip_addresses
