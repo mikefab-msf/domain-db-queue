@@ -1,4 +1,5 @@
 import logging
+
 import json
 from azure.functions import HttpRequest, HttpResponse
 from SharedCode.abstract_template import AbstractTemplateCheck, CheckResult
